@@ -1,0 +1,22 @@
+{
+  "name": "live",
+  "version": "0.1.0",
+  "description": "Live coding snapshots — Solana bootcamp (dynaprez)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "1": "node --disable-warning=ExperimentalWarning 1_keypair.ts",
+    "2": "node --disable-warning=ExperimentalWarning 2_balance.ts",
+    "3": "node --disable-warning=ExperimentalWarning 3_transfer.ts"
+  },
+  "dependencies": {
+    "@solana-program/system": "^0.13.0",
+    "@solana/kit": "^7.0.0",
+    "@solana/kit-plugin-rpc": "^0.15.0",
+    "@solana/kit-plugin-signer": "^0.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "typescript": "^7.0.2"
+  }
+}

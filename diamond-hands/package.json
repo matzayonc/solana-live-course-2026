@@ -1,0 +1,24 @@
+{
+  "license": "ISC",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "prettier \"**/*.{js,ts,json}\" --check",
+    "lint:fix": "prettier \"**/*.{js,ts,json}\" -w"
+  },
+  "dependencies": {
+    "@anchor-lang/core": "^1.1.2"
+  },
+  "devDependencies": {
+    "@solana/spl-token": "^0.4.15",
+    "@types/bn.js": "^5.2.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.1.2",
+    "bn.js": "^5.2.5",
+    "chai": "^6.2.2",
+    "mocha": "^11.7.6",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2"
+  }
+}

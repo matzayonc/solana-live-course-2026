@@ -1,0 +1,38 @@
+export ZSH="$HOME/.oh-my-zsh"
+
+# `agnoster` and friends need a patched font; `robbyrussell` renders correctly
+# in any terminal, which matters when this is on a projector.
+ZSH_THEME="robbyrussell"
+
+plugins=(
+  git
+  rust
+  npm
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+source "$ZSH/oh-my-zsh.sh"
+
+# History worth having across container restarts.
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_ALL_DUPS INC_APPEND_HISTORY
+
+alias t='anchor test'
+alias tb='anchor test --skip-build'
+alias b='anchor build'
+alias tc='npx tsc --noEmit'
+
+# Jump between the two halves of the repo. LIVE_ROOT is set by the image (/app)
+# and overridden by the devcontainer (the mounted workspace); the git lookup is
+# the fallback for anywhere else.
+ws() { cd "${LIVE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"; }
+alias dh='ws && cd diamond-hands'
+alias sc='ws && cd scripts'
+
+if [[ -o interactive ]]; then
+  print -P "%F{45}live%f — Solana bootcamp"
+  print -P "  %F{244}dh%f  diamond-hands (anchor)    %F{244}t%f   anchor test"
+  print -P "  %F{244}sc%f  scripts (snapshots)       %F{244}tc%f  typecheck"
+fi
