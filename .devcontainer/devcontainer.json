@@ -1,0 +1,59 @@
+{
+  "name": "live — Solana bootcamp",
+
+  // Reuses the repo Dockerfile, but stops at the `toolchain` stage: the source
+  // is bind-mounted by the devcontainer rather than baked into the image.
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "target": "toolchain",
+    "context": ".."
+  },
+
+  // The base image installs Rust, Solana and Anchor under /root.
+  "remoteUser": "root",
+
+  // The image defaults this to /app; here the source is mounted instead.
+  "remoteEnv": {
+    "LIVE_ROOT": "${containerWorkspaceFolder}"
+  },
+
+  // Matches where the workspace is auto-mounted, without hardcoding the
+  // directory name — renaming the checkout would otherwise break attach.
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Surfpool's RPC, so a validator started in the container is reachable from
+  // the host (e.g. `solana balance --url http://localhost:8899`).
+  "forwardPorts": [8899],
+  "portsAttributes": {
+    "8899": { "label": "Surfpool RPC", "onAutoForward": "silent" }
+  },
+
+  // Only the JS dependencies — the Rust build is left to `anchor build`, which
+  // would otherwise make first attach very slow.
+  "postCreateCommand": "npm --prefix diamond-hands ci && npm --prefix scripts ci",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "rust-analyzer.linkedProjects": ["diamond-hands/Cargo.toml"],
+        "rust-analyzer.check.command": "clippy",
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true,
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+    }
+  },
+
+  // Cargo and npm caches survive a rebuild.
+  "mounts": [
+    "source=live-cargo-registry,target=/root/.cargo/registry,type=volume",
+    "source=live-npm-cache,target=/root/.npm,type=volume"
+  ]
+}

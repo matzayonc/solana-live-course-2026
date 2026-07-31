@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sL -o anchor-tree.json \"https://api.github.com/repos/solana-foundation/anchor/git/trees/master?recursive=1\")"
+    ]
+  }
+}

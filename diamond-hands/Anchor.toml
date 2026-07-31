@@ -1,0 +1,18 @@
+[toolchain]
+package_manager = "npm"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+diamond_hands = "6PisfLVTpenAEvaZmSSswrf2hZy6F3YZ6zvHqBZDMXna"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "npx mocha --extension ts --timeout 1000000 tests/ --node-option disable-warning=ExperimentalWarning"
+
+[hooks]

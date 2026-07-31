@@ -1,0 +1,10 @@
+**/node_modules
+**/target
+**/.anchor
+**/test-ledger
+**/.surfpool
+.git
+
+# secret keys — never bake into an image
+scripts/keypair.json
+scripts/another-keypair.json

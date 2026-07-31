@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+
+# secret keys — never commit
+keypair.json
+another-keypair.json
