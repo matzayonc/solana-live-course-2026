@@ -1,0 +1,44 @@
+export ZSH="$HOME/.oh-my-zsh"
+
+# Disable auto-update checks and compfix prompts so zsh never blocks interactive or probing sessions
+DISABLE_AUTO_UPDATE="true"
+DISABLE_UPDATE_PROMPT="true"
+ZSH_DISABLE_COMPFIX="true"
+
+# `agnoster` and friends need a patched font; `robbyrussell` renders correctly
+# in any terminal, which matters when this is on a projector.
+ZSH_THEME="robbyrussell"
+
+plugins=(
+  git
+  rust
+  npm
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+source "$ZSH/oh-my-zsh.sh"
+
+# History worth having across container restarts.
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_ALL_DUPS INC_APPEND_HISTORY
+
+alias ll='ls -la'
+alias la='ls -A'
+alias sol='solana'
+alias anc='anchor'
+alias sp='surfpool'
+alias g='git'
+alias t='anchor test'
+alias tb='anchor test --skip-build'
+alias b='anchor build'
+alias tc='npx tsc --noEmit'
+
+# Workspace root shortcut
+ws() { cd "${LIVE_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"; }
+
+if [[ -o interactive ]]; then
+  print -P "%F{45}live%f — Solana bootcamp"
+  print -P "  %F{244}t%f   anchor test               %F{244}tc%f  typecheck"
+fi

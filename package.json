@@ -1,0 +1,30 @@
+{
+  "name": "live",
+  "version": "0.1.0",
+  "description": "Live coding environment — Solana bootcamp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "prettier \"**/*.{js,ts,json}\" --check",
+    "lint:fix": "prettier \"**/*.{js,ts,json}\" -w"
+  },
+  "dependencies": {
+    "@anchor-lang/core": "^1.1.2",
+    "@solana-program/system": "^0.13.0",
+    "@solana/kit": "^7.0.0",
+    "@solana/kit-plugin-rpc": "^0.16.0",
+    "@solana/kit-plugin-signer": "^0.13.0",
+    "@solana/spl-token": "^0.4.15"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.2.0",
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.1.2",
+    "bn.js": "^5.2.5",
+    "chai": "^6.2.2",
+    "mocha": "^11.8.0",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2"
+  }
+}

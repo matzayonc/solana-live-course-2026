@@ -1,0 +1,80 @@
+{
+  "name": "live — Solana bootcamp",
+
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "target": "toolchain",
+    "context": ".."
+  },
+
+  "remoteUser": "root",
+
+  "remoteEnv": {
+    "LIVE_ROOT": "${containerWorkspaceFolder}"
+  },
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "forwardPorts": [8899],
+  "portsAttributes": {
+    "8899": { "label": "Surfpool RPC", "onAutoForward": "silent" }
+  },
+
+  "postCreateCommand": "npm install",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Rust & Cargo
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb",
+        "fill-labs.dependi",
+
+        // TypeScript & Web
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "christian-kohler.path-intellisense",
+
+        // Infrastructure & Docker
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+
+        // System Monitoring & Quality of Life
+        "mutantdino.resourcemonitor",
+        "usernamehw.error-lens",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "streetsidesoftware.code-spell-checker",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "rust-analyzer.check.command": "clippy",
+        "rust-analyzer.procMacro.enable": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "errorLens.enabled": true,
+        "resourcemonitor.cpu.enable": true,
+        "resourcemonitor.memory.enable": true,
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        }
+      }
+    }
+  },
+
+  "mounts": [
+    "source=live-cargo-registry,target=/root/.cargo/registry,type=volume",
+    "source=live-npm-cache,target=/root/.npm,type=volume"
+  ]
+}
