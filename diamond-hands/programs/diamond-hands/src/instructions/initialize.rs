@@ -10,7 +10,7 @@ pub struct Initialize<'info> {
         init,
         payer = payer,
         space = 8 + Counter::INIT_SPACE,
-        seeds = [COUNTER_SEED],
+        seeds = [COUNTER_SEED, &payer.key().to_bytes()],
         bump
     )]
     pub counter: Account<'info, Counter>,

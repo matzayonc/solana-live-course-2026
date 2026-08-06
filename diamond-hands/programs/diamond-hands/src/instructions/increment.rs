@@ -4,7 +4,7 @@ use crate::{constants::*, error::ErrorCode, state::Counter};
 
 #[derive(Accounts)]
 pub struct Increment<'info> {
-    #[account(mut, seeds = [COUNTER_SEED], bump)]
+    #[account(mut, seeds = [COUNTER_SEED, &authority.key().to_bytes()], bump)]
     pub counter: Account<'info, Counter>,
     pub authority: Signer<'info>,
 }

@@ -9,9 +9,9 @@ describe("diamond-hands", () => {
   const program = anchor.workspace.diamondHands as Program<DiamondHands>;
 
   it("Initializes and increments a counter", async () => {
-    console.log(anchor.getProvider().publicKey ?? "No key");
+    const providerKey = anchor.getProvider().publicKey!;
     const [counter] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("counter")],
+      [Buffer.from("counter"), providerKey.toBuffer()],
       program.programId,
     );
 
@@ -26,13 +26,11 @@ describe("diamond-hands", () => {
 
     const counters = await program.account.counter.all();
     console.log(`Count: ${counters[0].account.count.toString()}`);
-    try {
-      const incrementTx = await program.methods
-        .increment()
-        .accountsPartial({ counter })
-        .rpc();
-      console.log("Increment transaction signature", incrementTx);
-    } catch (e) {}
+    const incrementTx = await program.methods
+      .increment()
+      .accountsPartial({ counter })
+      .rpc();
+    console.log("Increment transaction signature", incrementTx);
     const countersAfter = await program.account.counter.all();
     console.log(`Count: ${countersAfter[0].account.count.toString()}`);
   });
