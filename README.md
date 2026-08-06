@@ -14,3 +14,9 @@ This branch (`master`) provides the pre-configured development environment for t
    - **Anchor**: 1.1.2
    - **Surfpool**: local validator
    - **zsh**: configured with autosuggestions and syntax highlighting
+
+## To initialize Anchor project 
+
+```
+anchor init --no-git --package-manager npm --test-template mocha diamond-hands
+```

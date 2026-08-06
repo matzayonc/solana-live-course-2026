@@ -26,5 +26,9 @@
     "mocha": "^11.8.0",
     "prettier": "^3.9.6",
     "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "bufferutil@4.1.0": true,
+    "utf-8-validate@6.0.6": true
   }
 }
