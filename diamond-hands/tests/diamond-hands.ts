@@ -1,5 +1,6 @@
 import * as anchor from "@anchor-lang/core";
 import { Program } from "@anchor-lang/core";
+import { assert } from "chai";
 import { DiamondHands } from "../target/types/diamond_hands";
 
 describe("diamond-hands", () => {
@@ -10,28 +11,20 @@ describe("diamond-hands", () => {
 
   it("Initializes and increments a counter", async () => {
     const providerKey = anchor.getProvider().publicKey!;
-    const [counter] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("counter"), providerKey.toBuffer()],
+    const [locker] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("locker"), providerKey.toBuffer()],
       program.programId,
     );
 
-    const countersBefore = await program.account.counter.all();
-    console.log(`Count: ${countersBefore.length}`);
-
-    const initializeTx = await program.methods
-      .initialize()
-      .accountsPartial({ counter })
+    await program.methods
+      .initialize(new anchor.BN(2).pow(new anchor.BN(4)))
+      .accountsPartial({ counter: locker })
       .rpc();
-    console.log("Initialize transaction signature", initializeTx);
+    const counters = await program.account.locker.all();
+    await program.methods.increment().accountsPartial({ locker }).rpc();
+    const countersAfter = await program.account.locker.all();
 
-    const counters = await program.account.counter.all();
-    console.log(`Count: ${counters[0].account.count.toString()}`);
-    const incrementTx = await program.methods
-      .increment()
-      .accountsPartial({ counter })
-      .rpc();
-    console.log("Increment transaction signature", incrementTx);
-    const countersAfter = await program.account.counter.all();
-    console.log(`Count: ${countersAfter[0].account.count.toString()}`);
+    // assert.equal(counters[0].account.amount.toString(), "40");
+    assert.equal(countersAfter[0].account.amount.toString(), "0");
   });
 });
