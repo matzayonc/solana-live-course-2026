@@ -47,6 +47,7 @@ pub fn handle_initialize(ctx: Context<Lockup>, amount: u64) -> Result<()> {
     *ctx.accounts.locker = Locker {
         amount,
         authority: ctx.accounts.authority.key(),
+        expires: Clock::get().unwrap().unix_timestamp + 1,
     };
 
     let cpi_accounts = TransferChecked {

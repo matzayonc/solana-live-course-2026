@@ -43,14 +43,10 @@ pub struct Increment<'info> {
 pub fn handle_increment(ctx: Context<Increment>) -> Result<()> {
     let locker = &mut ctx.accounts.locker;
 
-    require_keys_eq!(
-        locker.authority,
-        ctx.accounts.payer.key(),
-        ErrorCode::Unauthorized,
-    );
+    let timestamp = Clock::get().expect("Couldn't get clock").unix_timestamp;
+    require_gte!(timestamp, locker.expires, ErrorCode::NotYetFinished);
 
     // Obliczenia
-
     let cpi_accounts = TransferChecked {
         from: ctx.accounts.vault.to_account_info(),
         to: ctx.accounts.payer_ata.to_account_info(),

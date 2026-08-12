@@ -92,6 +92,11 @@ describe("diamond-hands", () => {
       "after lockup",
     );
 
+    console.log("before wait");
+    await new Promise((r) => setTimeout(r, 5000));
+    // Do something to advance block
+    console.log("after wait");
+
     await program.methods
       .withdraw()
       .accountsPartial({
