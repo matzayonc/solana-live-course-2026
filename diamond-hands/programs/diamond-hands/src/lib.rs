@@ -15,11 +15,11 @@ declare_id!("EjymiXi4eWFKdCJmQKjHv9nFr3uFmaUYQJaicQjTbrcn");
 pub mod diamond_hands {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>, amount: u64) -> Result<()> {
+    pub fn lockup(ctx: Context<Lockup>, amount: u64) -> Result<()> {
         crate::instructions::lockup::handle_initialize(ctx, amount)
     }
 
-    pub fn increment(ctx: Context<Increment>) -> Result<()> {
+    pub fn withdraw(ctx: Context<Increment>) -> Result<()> {
         crate::instructions::withdraw::handle_increment(ctx)
     }
 }

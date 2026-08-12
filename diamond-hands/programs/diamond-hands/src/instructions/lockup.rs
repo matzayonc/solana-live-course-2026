@@ -1,11 +1,19 @@
 use anchor_lang::prelude::*;
+use anchor_spl::{
+    token_2022::transfer_checked,
+    token_interface::{self, Mint, TokenAccount, TokenInterface, TransferChecked},
+};
 
 use crate::{constants::*, state::Locker};
 
 #[derive(Accounts)]
-pub struct Initialize<'info> {
+pub struct Lockup<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
+    /// CHECK: No assumptions about authority needed
+    pub authority: UncheckedAccount<'info>,
+
+    // Dane
     #[account(
         init,
         payer = payer,
@@ -13,33 +21,42 @@ pub struct Initialize<'info> {
         seeds = [LOCKUP_SEED, &payer.key().to_bytes()],
         bump
     )]
-    pub counter: Account<'info, Locker>,
+    pub locker: Account<'info, Locker>,
+
+    // Tokeny
     #[account(
         init,
         payer = payer,
-        space = 0,
-        owner = system_program.key(),
         seeds = [VAULT_SEED, &payer.key().to_bytes()],
-        bump
+        bump,
+        token::mint = mint,
+        token::authority = locker,
+        token::token_program = token_program
     )]
-    /// CHECK: system-owned PDA that only ever holds lamports
-    pub vault: UncheckedAccount<'info>,
+    pub vault: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut, token::mint = mint, token::authority = payer)]
+    pub payer_ata: InterfaceAccount<'info, TokenAccount>,
+
+    // Stałe
+    pub mint: InterfaceAccount<'info, Mint>,
+    pub token_program: Interface<'info, TokenInterface>,
     pub system_program: Program<'info, System>,
 }
 
-pub fn handle_initialize(ctx: Context<Initialize>, amount: u64) -> Result<()> {
-    *ctx.accounts.counter = Locker {
+pub fn handle_initialize(ctx: Context<Lockup>, amount: u64) -> Result<()> {
+    *ctx.accounts.locker = Locker {
         amount,
-        authority: ctx.accounts.payer.key(),
+        authority: ctx.accounts.authority.key(),
     };
 
-    let cpi_accounts = anchor_lang::system_program::Transfer {
-        from: ctx.accounts.payer.to_account_info(),
+    let cpi_accounts = TransferChecked {
+        from: ctx.accounts.payer_ata.to_account_info(),
         to: ctx.accounts.vault.to_account_info(),
+        authority: ctx.accounts.payer.to_account_info(),
+        mint: ctx.accounts.mint.to_account_info(),
     };
-
-    let cpi_ctx = CpiContext::new(anchor_lang::system_program::ID, cpi_accounts);
-    anchor_lang::system_program::transfer(cpi_ctx, amount)?;
+    let cpi_ctx = CpiContext::new(ctx.accounts.token_program.key(), cpi_accounts);
+    transfer_checked(cpi_ctx, amount, ctx.accounts.mint.decimals)?;
 
     msg!("Hello, world! Counter initialized");
     Ok(())
