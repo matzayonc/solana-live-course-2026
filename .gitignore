@@ -5,3 +5,11 @@
 # secret keys — never commit
 keypair.json
 another-keypair.json
+
+# package manager caches
+.pnpm-store/
+
+# anchor / rust build output
+**/target/
+**/.anchor/
+**/test-ledger/

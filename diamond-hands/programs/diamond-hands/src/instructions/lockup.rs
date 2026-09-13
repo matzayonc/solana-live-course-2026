@@ -29,7 +29,7 @@ pub struct Lockup<'info> {
         payer = payer,
         seeds = [VAULT_SEED, &payer.key().to_bytes()],
         bump,
-        token::mint = mint,
+        token::mint = mint,0
         token::authority = locker,
         token::token_program = token_program
     )]
